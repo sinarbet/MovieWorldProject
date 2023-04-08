@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "AwesomeProject2.app"
-               BlueprintName = "AwesomeProject2"
-               ReferencedContainer = "container:AwesomeProject2.xcodeproj">
+               BuildableName = "MovieWorldProject.app"
+               BlueprintName = "MovieWorldProject"
+               ReferencedContainer = "container:MovieWorldProject.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "AwesomeProject2Tests.xctest"
-               BlueprintName = "AwesomeProject2Tests"
-               ReferencedContainer = "container:AwesomeProject2.xcodeproj">
+               BuildableName = "MovieWorldProjectTests.xctest"
+               BlueprintName = "MovieWorldProjectTests"
+               ReferencedContainer = "container:MovieWorldProject.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "AwesomeProject2.app"
-            BlueprintName = "AwesomeProject2"
-            ReferencedContainer = "container:AwesomeProject2.xcodeproj">
+            BuildableName = "MovieWorldProject.app"
+            BlueprintName = "MovieWorldProject"
+            ReferencedContainer = "container:MovieWorldProject.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "AwesomeProject2.app"
-            BlueprintName = "AwesomeProject2"
-            ReferencedContainer = "container:AwesomeProject2.xcodeproj">
+            BuildableName = "MovieWorldProject.app"
+            BlueprintName = "MovieWorldProject"
+            ReferencedContainer = "container:MovieWorldProject.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

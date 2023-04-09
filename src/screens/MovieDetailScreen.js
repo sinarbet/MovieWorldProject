@@ -35,7 +35,7 @@ const MovieDetailScreen = ({ navigation, route, addFavourite, removeFavourite })
 	}, [favourite]);
 
 	return (
-		<View>
+		<View style={styles.viewMovieDetail}>
 			<TouchableOpacity
 				onPress={onPress}>
 				<Image

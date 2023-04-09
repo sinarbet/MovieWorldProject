@@ -4,6 +4,7 @@ import { connect, useSelector } from 'react-redux';
 import { View, Text, Image, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import StarRating from 'react-native-star-rating-widget';
 import { addFavouriteAction, removeFavouriteAction } from '../store/actions/actions';
+import styles from './styles';
 
 const MovieDetailScreen = ({ navigation, route, addFavourite, removeFavourite }) => {
 	const { favourite } = useSelector((state) => state.movies);
@@ -14,22 +15,20 @@ const MovieDetailScreen = ({ navigation, route, addFavourite, removeFavourite })
 	const addIcon = require('../images/red-heart.png');
 	const removeIcon = require('../images/heart.png');
 
-	const onPress = () =>
-	{
-		if(favourite.find((m) => m.id == favMovie.id)){
+	const onPress = () => {
+		if (favourite.find((m) => m.id == favMovie.id)) {
 			removeFavourite(favMovie.id);
-			Alert.alert('The movie removed from favorites.');
-			
+			//Alert.alert('The movie removed from favorites.');
 		}
 		else {
 			addFavourite(favMovie);
-			Alert.alert('The movie added to favorites.');
+			//Alert.alert('The movie added to favorites.');
 		}
 	}
 
 	useEffect(() => {
 		setIsFavMov(favourite.find((m) => m.id == favMovie.id) ? true : false);
-	  }, [favourite]);
+	}, [favourite]);
 
 	return (
 		<View>
@@ -37,27 +36,27 @@ const MovieDetailScreen = ({ navigation, route, addFavourite, removeFavourite })
 				onPress={onPress}>
 				<Image
 					source={isFavMov ? addIcon : removeIcon}
-					style={{ width: 24, height: 22, marginLeft: 320, marginTop: 20 }} />
+					style={styles.movieDetailFavIcon} />
 			</TouchableOpacity>
 			<ScrollView>
-				<View style={{ flexDirection: 'column', alignItems: 'center', marginTop: 10 }}>
+				<View style={styles.movieDetailView}>
 					<View>
 						<Image
-							style={{ height: 300, width: 200, borderRadius: 10 }}
+							style={styles.movieDetailPoster}
 							source={{
 								uri: 'https://image.tmdb.org/t/p/w500' + posterDetail,
 							}}>
 						</Image>
 					</View>
-					<View style={{ flexDirection: 'column', top: 20, marginHorizontal: 30 }}>
-						<Text style={{ fontWeight: 'bold', fontSize: 22, marginVertical: 5 }}>{route.params.movie.title}</Text>
+					<View style={styles.movieDetailInfoView}>
+						<Text style={styles.movieDetailTitle}>{route.params.movie.title}</Text>
 						<StarRating
 							rating={(route.params.movie.vote_average / 2)}
 							onChange={setRatings}
 							starSize={28}
 						/>
-						<Text style={{ fontWeight: 'bold', fontSize: 14, marginVertical: 10 }}>Description</Text>
-						<View style={{ marginBottom: 70 }}><Text>{route.params.movie.overview}</Text></View>
+						<Text style={styles.movieDetailDescTitle}>Description</Text>
+						<View style={styles.movieDetailOverview}><Text>{route.params.movie.overview}</Text></View>
 					</View>
 				</View>
 			</ScrollView>
@@ -67,9 +66,9 @@ const MovieDetailScreen = ({ navigation, route, addFavourite, removeFavourite })
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-	  addFavourite: (movie) => dispatch(addFavouriteAction(movie)),
-	  removeFavourite: (movie) => dispatch(removeFavouriteAction(movie))
+		addFavourite: (movie) => dispatch(addFavouriteAction(movie)),
+		removeFavourite: (movie) => dispatch(removeFavouriteAction(movie))
 	};
-  };
-  
+};
+
 export default connect(null, mapDispatchToProps)(MovieDetailScreen);

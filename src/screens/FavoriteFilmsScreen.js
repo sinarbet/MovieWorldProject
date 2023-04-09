@@ -35,30 +35,31 @@ const FavoriteFilmsScreen = ({ navigation, route, removeFavourite }) => {
 
 		return (
 			<TouchableOpacity onPress={() => { navigation.navigate('MovieDetailScreen', { movie: item }) }}
-				style={{ width: 240 }}>
-				<View style={{ flexDirection: 'row' }}>
-					<View style={{ height: 143, with: 100, marginHorizontal: 20, marginBottom: 15 }}>
+				style={styles.movieDetailButton}>
+				<View style={styles.rowStyle}>
+					<View style={styles.movieImageView}>
 						<Image
-							style={{ height: 143, width: 100, borderRadius: 10, backgroundColor: 'red' }}
+							style={styles.movieImage}
 							source={{
 								uri: 'https://image.tmdb.org/t/p/w500' + moviePoster,
 							}}></Image></View>
-					<View style={{ flexDirection: 'column' }}>
-						<View style={{ flexDirection: 'row' }}>
-							<Text style={{ fontWeight: '500', marginVertical: 10, width: 180 }}>{item.title}</Text>
+					<View style={styles.columnStyle}>
+						<View style={styles.rowStyle}>
+							<Text style={styles.favoriteMovieNameStyle}>{item.title}</Text>
 							<TouchableOpacity onPress={() => _onRemove(item.id)}>
-								<Image source={cancelIcon} style={{ height: 12, width: 12, marginLeft: 20 }}></Image>
+								<Image source={cancelIcon} style={styles.cancelIconStyle}></Image>
 							</TouchableOpacity>
 						</View>
-						<View style={{ marginRight: 30 }}>
-							<Text numberOfLines={4} style={{ fontSize: 12, fontWeight: '200' }}>{item.overview}</Text>
+						<View style={styles.movieOverviewView}>
+							<Text numberOfLines={4} style={styles.movieOverviewText}>{item.overview}</Text>
 						</View>
-						<View style={{ top: 20 }}>
+						<View style={styles.starRatingView}>
 							<StarRating
 								rating={(item.vote_average / 2)}
 								onChange={setRating}
 								starSize={24}
-							/></View>
+							/>
+						</View>
 					</View>
 				</View>
 			</TouchableOpacity>
@@ -87,7 +88,7 @@ const FavoriteFilmsScreen = ({ navigation, route, removeFavourite }) => {
 						style={styles.sortCategoryButton}>
 						<View style={styles.imageView}>
 							<Image
-								source={require('../images/heart.png')}
+								source={require('../images/sort-category-icon.png')}
 								style={styles.imageContent} />
 							<Text> Sort by Category </Text></View>
 					</TouchableOpacity>
@@ -95,7 +96,7 @@ const FavoriteFilmsScreen = ({ navigation, route, removeFavourite }) => {
 						style={styles.sortRatingButton}>
 						<View style={styles.imageView}>
 							<Image
-								source={require('../images/heart.png')}
+								source={require('../images/sort-rating-icon.png')}
 								style={styles.imageContent} />
 							<Text> Sort by Rating</Text></View>
 					</TouchableOpacity>

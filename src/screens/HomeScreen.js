@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect, useSelector } from 'react-redux';
 import { Searchbar } from 'react-native-paper';
-import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, Image, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import StarRating from 'react-native-star-rating-widget';
 import styles from "./styles";
 import { fetchGenresAction, fetchMoviesAction } from "../store/actions/actions";
@@ -12,14 +12,19 @@ const HomeScreen = ({ navigation, fetchMovies, fetchGenres }) => {
 	const { movies } = useSelector((state) => state.movies);
 	const [rating, setRating] = useState(0);
 	const [sortedMovies, setSortedMovies] = useState([]);
+	const [loading, setLoading] = useState(false);
+	const [hasMore, setHasMore] = useState(true);
+	const [page, setPage] = useState(1);
 
 	const fetchData = async () => {
+		setLoading(true);
 		const data = await MoviesApi.getMovies();
-		const genres = await MoviesApi.getGenres()
+		const genres = await MoviesApi.getGenres();
 		fetchMovies(data);
 		fetchGenres(genres);
+		setLoading(false);
 	};
-
+	
 	useEffect(() => {
 		fetchData();
 	}, []);
@@ -40,6 +45,13 @@ const HomeScreen = ({ navigation, fetchMovies, fetchGenres }) => {
 		const newSortedMovies = [...movies].sort(compareFn);
 		setSortedMovies(newSortedMovies);
 	};
+
+	const onEndReached = () => {
+		if (!loading && hasMore && sortedMovies.length > 0 && sortedMovies.length % 20 === 0) {
+		  setPage((prevPage) => prevPage + 1);
+		  setLoading(true);
+		}
+	  };
 
 	const renderItem = ({ item }) => {
 		const moviePoster = item.backdrop_path;
@@ -64,6 +76,11 @@ const HomeScreen = ({ navigation, fetchMovies, fetchGenres }) => {
 						</View>
 					</View>
 				</View>
+				{loading ? (
+				<View>
+					<ActivityIndicator size='small' color='blue' />
+				</View>
+			) : null}
 			</TouchableOpacity>
 		);
 	};
@@ -105,7 +122,9 @@ const HomeScreen = ({ navigation, fetchMovies, fetchGenres }) => {
 				<FlatList
 					data={sortedMovies}
 					renderItem={renderItem}
-					key={(idx) => idx.toString()}
+					keyExtractor={(item) => item.id.toString()}
+					onEndReachedThreshold={0.5}
+					initialNumToRender={10}
 				/></View>
 		</View>
 	);

@@ -4,7 +4,8 @@ import { Searchbar } from 'react-native-paper';
 import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
 import StarRating from 'react-native-star-rating-widget';
 import styles from "./styles";
-import { fetchMoviesAction } from "../redux/actions/actions";
+import { fetchMoviesAction } from "../store/actions/actions";
+import MoviesApi from '../store/services/api';
 
 const HomeScreen = ({ navigation, fetchMovies }) => {
 
@@ -14,15 +15,8 @@ const HomeScreen = ({ navigation, fetchMovies }) => {
 	const [sortedMovies, setSortedMovies] = useState([]);
 
 	const fetchData = async () => {
-		const url = "https://api.themoviedb.org/3/movie/popular?api_key=f210aaf678b803fec8323c1ceffd93f9"
-		const resp = await fetch(url, {
-			headers: {
-				Authentication: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmMjEwYWFmNjc4YjgwM2ZlYzgzMjNjMWNlZmZkOTNmOSIsInN1YiI6IjY0MmVkYzExMmRjNDRlMDEyNzEyMTZhYyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.4nDVH7cpIAOP_p6rfDA52EAJ1cbIIVWxK7sVpHrAuRs'
-			}
-		})
-
-		const data = await resp.json();
-		fetchMovies(data.results);
+		const data = await MoviesApi.getMovies();
+		fetchMovies(data);
 	};
 
 	useEffect(() => {
@@ -33,7 +27,7 @@ const HomeScreen = ({ navigation, fetchMovies }) => {
 		setSortedMovies(movies);
 	  }, [movies]);
 
-	const onChangeSearch = query => setSearchQuery(query);
+	//const onChangeSearch = query => setSearchQuery(query);
 
 	const _onSortByCategory = () => {
 		sortMovies((a, b) => a.genre_ids[0] - b.genre_ids[0]);
@@ -49,10 +43,10 @@ const HomeScreen = ({ navigation, fetchMovies }) => {
 	};
 
 	const renderItem = ({ item }) => {
-		const moviePoster = item.backdrop_path.toString();
+		const moviePoster = item.backdrop_path;
 		return (
-			<TouchableOpacity onPress={() => { navigation.navigate('MovieDetails', { movie: item }) }}
-				style={{ width: 250 }}>
+			<TouchableOpacity onPress={() => { navigation.navigate('MovieDetailScreen', { movie: item }) }}
+				style={{ width: 235 }}>
 				<View style={{ flexDirection: 'row' }}>
 					<View style={{ height: 143, with: 100, marginHorizontal: 20, marginBottom: 15 }}><Image
 						style={{ height: 143, width: 100, borderRadius: 10 }}
@@ -86,20 +80,13 @@ const HomeScreen = ({ navigation, fetchMovies }) => {
 						style={styles.imageContent} />
 						<Text> Favorite Movies</Text></View>
 				</TouchableOpacity></View>
-			<View style={{ top: 40 }}>
-				{/*<Searchbar
-				placeholder="Search"
-				onChangeText={onChangeSearch}
-				value={searchQuery}
-				backgroundColor= '#EFEFF0'
-	/>*/}</View>
 			<View style={styles.sortSectionView}>
 				<TouchableOpacity
 					onPress={_onSortByCategory}
 					style={styles.sortCategoryButton}>
 					<View style={styles.imageView}>
 						<Image
-							source={require('../images/heart.png')}
+							source={require('../images/sort-category-icon.png')}
 							style={styles.imageContent} />
 						<Text> Sort by Category </Text></View>
 				</TouchableOpacity>
@@ -108,7 +95,7 @@ const HomeScreen = ({ navigation, fetchMovies }) => {
 					style={ styles.sortRatingButton}>
 					<View style={styles.imageView}>
 						<Image
-							source={require('../images/heart.png')}
+							source={require('../images/sort-rating-icon.png')}
 							style={styles.imageContent} />
 						<Text> Sort by Rating</Text></View>
 				</TouchableOpacity>

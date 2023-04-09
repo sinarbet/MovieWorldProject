@@ -18,6 +18,22 @@ export default StyleSheet.create({
     fontSize: 22
   },
 
+  viewDescEmpty: {
+    alignItems: 'center', 
+    height: 500, 
+    justifyContent: 'center'
+  },
+
+  textTitleEmpty: {
+    fontWeight: '500', 
+    fontSize: 14
+  },
+
+  textDescEmpty: { 
+    fontWeight: '200', 
+    fontSize: 14, 
+    top: 10 },
+
   favoriteMoviesButton: {
     height: 30,
     left: 90,
@@ -28,7 +44,8 @@ export default StyleSheet.create({
   },
 
   moviesFlatList: {
-    top: 60
+    top: 60,
+    marginBottom: 120
   },
 
   imageView: {

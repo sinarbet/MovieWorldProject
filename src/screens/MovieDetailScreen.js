@@ -3,27 +3,41 @@ import React, { useEffect, useState } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { View, Text, Image, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import StarRating from 'react-native-star-rating-widget';
-import { addFavouriteAction } from '../redux/actions/actions';
+import { addFavouriteAction, removeFavouriteAction } from '../store/actions/actions';
 
-const MovieDetails = ({ navigation, route, addFavourite }) => {
+const MovieDetailScreen = ({ navigation, route, addFavourite, removeFavourite }) => {
 	const { favourite } = useSelector((state) => state.movies);
 	const [ratings, setRatings] = useState(0);
 	const posterDetail = route.params.movie.poster_path;
 	const favMovie = route.params.movie;
+	const [isFavMov, setIsFavMov] = useState(favourite.find((m) => m.id == favMovie.id) ? true : false);
+	const addIcon = require('../images/red-heart.png');
+	const removeIcon = require('../images/heart.png');
 
 	const onPress = () =>
 	{
-		Alert.alert("The movie added to favorites.");
-		addFavourite(favMovie);
+		if(favourite.find((m) => m.id == favMovie.id)){
+			removeFavourite(favMovie.id);
+			Alert.alert('The movie removed from favorites.');
+			
+		}
+		else {
+			addFavourite(favMovie);
+			Alert.alert('The movie added to favorites.');
+		}
 	}
+
+	useEffect(() => {
+		setIsFavMov(favourite.find((m) => m.id == favMovie.id) ? true : false);
+	  }, [favourite]);
 
 	return (
 		<View>
 			<TouchableOpacity
 				onPress={onPress}>
 				<Image
-					source={require('../images/heart.png')}
-					style={{ width: 22, height: 22, marginLeft: 320, marginTop: 20 }} />
+					source={isFavMov ? addIcon : removeIcon}
+					style={{ width: 24, height: 22, marginLeft: 320, marginTop: 20 }} />
 			</TouchableOpacity>
 			<ScrollView>
 				<View style={{ flexDirection: 'column', alignItems: 'center', marginTop: 10 }}>
@@ -54,7 +68,8 @@ const MovieDetails = ({ navigation, route, addFavourite }) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 	  addFavourite: (movie) => dispatch(addFavouriteAction(movie)),
+	  removeFavourite: (movie) => dispatch(removeFavouriteAction(movie))
 	};
   };
   
-export default connect(null, mapDispatchToProps)(MovieDetails);
+export default connect(null, mapDispatchToProps)(MovieDetailScreen);

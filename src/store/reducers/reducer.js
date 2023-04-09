@@ -1,4 +1,5 @@
 import * as actionTypes from '../actions/actionsTypes';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const initialState = {
 	movies: [],
@@ -14,7 +15,7 @@ export const moviesReducer = (state = initialState, action) => {
 			};
 		case actionTypes.ADD_TO_FAVOURITE:
 			const newMovie = [...state.favourite, action.payload];
-			//window.localStorage.setItem('favourite', JSON.stringify(newMovie));
+			AsyncStorage.setItem('favourite', JSON.stringify(newMovie));
 			return {
 				...state,
 				favourite: newMovie,

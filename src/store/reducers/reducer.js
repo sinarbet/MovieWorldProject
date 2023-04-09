@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const initialState = {
 	movies: [],
 	favourite: [],
+	genres: []
 };
 
 export const moviesReducer = (state = initialState, action) => {
@@ -13,9 +14,19 @@ export const moviesReducer = (state = initialState, action) => {
 				...state,
 				movies: action.payload,
 			};
+		case actionTypes.FETCH_GENRES:
+			return {
+				...state,
+				genres: action.payload,
+			};
+		case actionTypes.SET_FAVOURITE:
+			return {
+				...state,
+				favourite: action.payload,
+			};
 		case actionTypes.ADD_TO_FAVOURITE:
 			const newMovie = [...state.favourite, action.payload];
-			AsyncStorage.setItem('favourite', JSON.stringify(newMovie));
+			//AsyncStorage.setItem('favourite', JSON.stringify(newMovie));
 			return {
 				...state,
 				favourite: newMovie,

@@ -4,10 +4,10 @@ import { Searchbar } from 'react-native-paper';
 import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
 import StarRating from 'react-native-star-rating-widget';
 import styles from "./styles";
-import { fetchMoviesAction } from "../store/actions/actions";
+import { fetchGenresAction, fetchMoviesAction } from "../store/actions/actions";
 import MoviesApi from '../store/services/api';
 
-const HomeScreen = ({ navigation, fetchMovies }) => {
+const HomeScreen = ({ navigation, fetchMovies, fetchGenres }) => {
 
 	const { movies } = useSelector((state) => state.movies);
 	const [rating, setRating] = useState(0);
@@ -15,7 +15,9 @@ const HomeScreen = ({ navigation, fetchMovies }) => {
 
 	const fetchData = async () => {
 		const data = await MoviesApi.getMovies();
+		const genres = await MoviesApi.getGenres()
 		fetchMovies(data);
+		fetchGenres(genres);
 	};
 
 	useEffect(() => {
@@ -111,6 +113,7 @@ const HomeScreen = ({ navigation, fetchMovies }) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		fetchMovies: (movies) => dispatch(fetchMoviesAction(movies)),
+		fetchGenres: (movies) => dispatch(fetchGenresAction(movies)),
 	};
 };
 

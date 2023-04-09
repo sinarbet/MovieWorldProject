@@ -7,13 +7,17 @@ import { addFavouriteAction, removeFavouriteAction } from '../store/actions/acti
 import styles from './styles';
 
 const MovieDetailScreen = ({ navigation, route, addFavourite, removeFavourite }) => {
-	const { favourite } = useSelector((state) => state.movies);
+	const { favourite, genres } = useSelector((state) => state.movies);
 	const [ratings, setRatings] = useState(0);
 	const posterDetail = route.params.movie.poster_path;
 	const favMovie = route.params.movie;
 	const [isFavMov, setIsFavMov] = useState(favourite.find((m) => m.id == favMovie.id) ? true : false);
 	const addIcon = require('../images/red-heart.png');
 	const removeIcon = require('../images/heart.png');
+
+	const genreList = favMovie.genre_ids.map((id) => {
+		return genres.genres.find((genre) => genre.id === id);
+	});
 
 	const onPress = () => {
 		if (favourite.find((m) => m.id == favMovie.id)) {
@@ -55,6 +59,16 @@ const MovieDetailScreen = ({ navigation, route, addFavourite, removeFavourite })
 							onChange={setRatings}
 							starSize={28}
 						/>
+						<View style={styles.movieDetailGenre}>
+							<Text style={styles.movieDetailDescTitle}>Genre: </Text>
+							<View style={styles.movieDetailGenre}>
+								{genreList.map((genre, index) => (
+									<Text key={index}>
+										{genre.name}{index === genreList.length - 1 ? '' : '/'}
+									</Text>
+								))}
+							</View>
+						</View>
 						<Text style={styles.movieDetailDescTitle}>Description</Text>
 						<View style={styles.movieDetailOverview}><Text>{route.params.movie.overview}</Text></View>
 					</View>

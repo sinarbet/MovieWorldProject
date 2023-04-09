@@ -105,6 +105,11 @@ export default StyleSheet.create({
     marginBottom: 80
   },
 
+  movieDetailGenre: {
+    flexDirection:'row',
+    marginTop: 10
+  },
+
   movieDetailButton :{
     width: 235
   },

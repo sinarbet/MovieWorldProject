@@ -4,12 +4,10 @@ import { View, Text, TouchableOpacity, FlatList, Image, Alert } from 'react-nati
 import { connect, useSelector } from 'react-redux';
 import styles from './styles';
 import StarRating from 'react-native-star-rating-widget';
-import { removeFavouriteAction } from '../store/actions/actions';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { addFavouriteAction, removeFavouriteAction, setFavouriteAction } from '../store/actions/actions';
 
-const FavoriteFilmsScreen = ({ navigation, route, removeFavourite }) => {
+const FavoriteFilmsScreen = ({ navigation, route, removeFavourite, addFavourite, setFavourite }) => {
 	const { favourite } = useSelector((state) => state.movies);
-	const [sortedFavorites, setSortedFavorites] = useState([]);
 	const [rating, setRating] = useState(0);
 	const cancelIcon = require('../images/cancel-icon.png');
 
@@ -18,20 +16,22 @@ const FavoriteFilmsScreen = ({ navigation, route, removeFavourite }) => {
 	}
 
 	const _onSortByCategory = () => {
-		sortMovies((a, b) => a.genre_ids[0] - b.genre_ids[0]);
-	};
-
+		const filteredByGenre = Object.values(favourite).filter(movie => movie.genre_ids[0]);
+		const sortedByCategory = filteredByGenre.sort((a, b) => {
+		  if (a.genre_ids[0] < b.genre_ids[0]) return -1;
+		  if (a.genre_ids[0] > b.genre_ids[0]) return 1;
+		  return 0;
+		});
+		setFavourite(sortedByCategory);
+	  };
+	
 	const _onSortByRating = () => {
-		sortMovies((a, b) => b.vote_average - a.vote_average);
-	};
-
-	const sortMovies = (compareFn) => {
-		const newSortedMovies = [...favourite].sort(compareFn);
-		setSortedFavorites(newSortedMovies);
+		const sortedByRating = Object.values(favourite).sort((a, b) => b.vote_average - a.vote_average);
+		setFavourite(sortedByRating);
 	};
 
 	const renderItem = ({ item }) => {
-		const moviePoster = item.backdrop_path.toString();
+		const moviePoster = item.backdrop_path ? item.backdrop_path.toString() : '';
 
 		return (
 			<TouchableOpacity onPress={() => { navigation.navigate('MovieDetailScreen', { movie: item }) }}
@@ -85,6 +85,7 @@ const FavoriteFilmsScreen = ({ navigation, route, removeFavourite }) => {
 				</View>
 				<View style={styles.sortSectionView}>
 					<TouchableOpacity
+						onPress={_onSortByCategory}
 						style={styles.sortCategoryButton}>
 						<View style={styles.imageView}>
 							<Image
@@ -93,6 +94,7 @@ const FavoriteFilmsScreen = ({ navigation, route, removeFavourite }) => {
 							<Text> Sort by Category </Text></View>
 					</TouchableOpacity>
 					<TouchableOpacity
+						onPress={_onSortByRating}
 						style={styles.sortRatingButton}>
 						<View style={styles.imageView}>
 							<Image
@@ -105,7 +107,7 @@ const FavoriteFilmsScreen = ({ navigation, route, removeFavourite }) => {
 					<FlatList
 						data={favourite}
 						renderItem={renderItem}
-						key={(idx) => idx.toString()}
+						keyExtractor={(item, index) => index.toString()}
 					/></View>
 			</View></>
 	);
@@ -113,7 +115,9 @@ const FavoriteFilmsScreen = ({ navigation, route, removeFavourite }) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		removeFavourite: (movie) => dispatch(removeFavouriteAction(movie))
+		removeFavourite: (movie) => dispatch(removeFavouriteAction(movie)),
+		addFavourite: (movie) => dispatch(addFavouriteAction(movie)),
+		setFavourite: (movies) => dispatch(setFavouriteAction(movies))
 	};
 };
 
